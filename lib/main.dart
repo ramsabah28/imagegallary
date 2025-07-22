@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'Gallary.dart';
+import 'assets_list.dart';
+import 'dart:async';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -31,11 +34,48 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int currentIndexPage = 0;
 
-  final List<Widget> pages = [
-    Center(child: Text('Home Page', style: TextStyle(fontSize: 24))),
-    Gallary(),
-    Center(child: Text('Notifications', style: TextStyle(fontSize: 24))),
-  ];
+  Widget _buildHomePage() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 220,
+          child: PageView.builder(
+            itemCount: assetImages.length,
+            controller: PageController(viewportFraction: 0.85),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    assetImages[index],
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 24),
+        const SizedBox(height: 24),
+        const _RandomImageBox(),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  final List<Widget> pages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    pages.addAll([
+      _buildHomePage(),
+      Gallary(),
+      Center(child: Text('Notifications', style: TextStyle(fontSize: 24))),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +98,81 @@ class _MyHomePageState extends State<MyHomePage> {
           NavigationDestination(icon: Icon(Icons.image), label: 'Gallary', selectedIcon: Icon(Icons.image),),
           NavigationDestination(icon: Icon(Icons.notifications), label: 'Notifications', selectedIcon: Icon(Icons.notifications),)
         ],
+      ),
+    );
+  }
+}
+
+class _RandomImageBox extends StatefulWidget {
+  const _RandomImageBox();
+
+  @override
+  State<_RandomImageBox> createState() => _RandomImageBoxState();
+}
+
+class _RandomImageBoxState extends State<_RandomImageBox> {
+  int _currentIndex = 0;
+  late Timer _timer;
+  final Random _random = Random();
+  bool _visible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      setState(() {
+        _visible = false;
+      });
+      Future.delayed(const Duration(milliseconds: 400), () {
+        setState(() {
+          _currentIndex = _random.nextInt(assetImages.length);
+          _visible = true;
+        });
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 300,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 40 ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Center(
+        child: AnimatedOpacity(
+          opacity: _visible ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 400),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              assetImages[_currentIndex],
+              fit: BoxFit.cover,
+              width: 400,
+              height: 320,
+            ),
+          ),
+        ),
       ),
     );
   }
