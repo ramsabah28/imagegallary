@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'assets_list.dart';
 
 class Gallary extends StatelessWidget {
-
   Gallary({super.key});
 
-  final List<String> imagePaths = const [
-    'lib/assets/basketball_1.jpeg',
-    'lib/assets/basketball_2.jpeg',
-    'lib/assets/bike.jpeg',
-    'lib/assets/kaya.jpeg',
-    'lib/assets/running.jpeg',
-    'lib/assets/ski.jpeg',
-    'lib/assets/soccer.jpeg',
-    'lib/assets/tennis_1.jpeg',
-    'lib/assets/tennis_2.jpeg',
-  ];
+  String _getImageTitle(String path) {
+    final nameWithExt = path.split('/').last;
+    final name = nameWithExt.split('.').first;
+    return name.replaceAll('_', ' ');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +19,39 @@ class Gallary extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      itemCount: imagePaths.length,
+      itemCount: assetImages.length,
       itemBuilder: (context, index) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.asset(
-            imagePaths[index],
-            fit: BoxFit.cover,
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  assetImages[index],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Text(
+                _getImageTitle(assetImages[index]),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17,
+                  color: Colors.black,
+                  letterSpacing: 1.1,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         );
       },
     );
   }
-
-
 }
