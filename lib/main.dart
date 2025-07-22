@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Gallary.dart';
-import 'assets_list.dart';
+import 'assets/gallery_data.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
         SizedBox(
           height: 220,
           child: PageView.builder(
-            itemCount: assetImages.length,
+            itemCount: galleryData.length,
             controller: PageController(viewportFraction: 0.85),
             itemBuilder: (context, index) {
               return Padding(
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    assetImages[index],
+                    galleryData[index].imagePath,
                     fit: BoxFit.cover,
                     width: double.infinity,
                   ),
@@ -58,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         const SizedBox(height: 24),
+        const Text('<<- SLIDE ->>', style: TextStyle(fontSize: 24)),
         const SizedBox(height: 24),
         const _RandomImageBox(),
         const SizedBox(height: 24),
@@ -129,7 +130,7 @@ class _RandomImageBoxState extends State<_RandomImageBox> {
       });
       Future.delayed(const Duration(milliseconds: 400), () {
         setState(() {
-          _currentIndex = _random.nextInt(assetImages.length);
+          _currentIndex = _random.nextInt(galleryData.length);
           _visible = true;
         });
       });
@@ -147,7 +148,7 @@ class _RandomImageBoxState extends State<_RandomImageBox> {
     return Container(
       width: double.infinity,
       height: 300,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 40 ),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
@@ -166,7 +167,7 @@ class _RandomImageBoxState extends State<_RandomImageBox> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(
-              assetImages[_currentIndex],
+              galleryData[_currentIndex].imagePath,
               fit: BoxFit.cover,
               width: 400,
               height: 320,

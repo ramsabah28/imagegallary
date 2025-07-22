@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'assets_list.dart';
+import 'assets/gallery_data.dart';
 
 class Gallary extends StatelessWidget {
   Gallary({super.key});
@@ -19,7 +19,7 @@ class Gallary extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      itemCount: assetImages.length,
+      itemCount: galleryData.length,
       itemBuilder: (context, index) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -28,7 +28,7 @@ class Gallary extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
-                  assetImages[index],
+                  galleryData[index].imagePath,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -37,7 +37,7 @@ class Gallary extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: Text(
-                _getImageTitle(assetImages[index]),
+                _getImageTitle(galleryData[index].imagePath),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
