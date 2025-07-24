@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Gallary.dart';
 import 'assets/gallery_data.dart';
+import 'profile.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -75,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _buildHomePage(),
       Gallary(),
       Center(child: Text('Notifications', style: TextStyle(fontSize: 24))),
+      const ProfilePage(),
     ]);
   }
 
@@ -97,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
         destinations: const <Widget>[
           NavigationDestination(icon: Icon(Icons.home), label: 'Home', selectedIcon: Icon(Icons.home),),
           NavigationDestination(icon: Icon(Icons.image), label: 'Gallary', selectedIcon: Icon(Icons.image),),
-          NavigationDestination(icon: Icon(Icons.notifications), label: 'Notifications', selectedIcon: Icon(Icons.notifications),)
+          NavigationDestination(icon: Icon(Icons.notifications), label: 'Notifications', selectedIcon: Icon(Icons.notifications),),
+          NavigationDestination(icon: Icon(Icons.person), label: 'Profile', selectedIcon: Icon(Icons.person),),
         ],
       ),
     );
